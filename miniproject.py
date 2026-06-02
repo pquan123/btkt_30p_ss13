@@ -1,123 +1,83 @@
-list_employees = [
-    {
-        "id": 101,
-        "name": "Admin",
-        "salary": 10000
-    }
-]
+list_employees = []
 
-while True:
+while True: 
     choice = input("""
+                QUAN LY NHÂN SỰ - STAFF MANAGER
 
-      QUAN LY NHAN SU - STAFF MANAGER
+                1. Thêm nhân viên mới
+                2. Danh sach nhan viên
+                3. Tim kiem nhan vien (theo mã)
+                4. Xoa nhan vien khoi he thông
+                5. Thoat chương trinh
 
-1. Them nhan vien moi
-2. Danh sach nhan vien
-3. Tim kiem nhan vien theo ID
-4. Xoa nhan vien khoi he thong
-5. Thoat chuong trinh
-
-Nhap lua chon cua ban: 
-""")
-
-    if not choice.isdigit():
-        print("Vui long nhap so tu 1 den 5!")
-        continue
-
-    choice = int(choice)
-
-    match choice:
-
-        case 1:
-            id_employee = list_employees[-1]["id"] + 1
-
-            while True:
-                name_employee = input("Nhap ten nhan vien: ")
-
-                if name_employee.strip() == "":
-                    print("Ten nhan vien khong duoc de trong!")
+                Nhập lựa chọn của bạn: """)
+    if choice.isdigit():
+        choice = int(choice)
+        match choice:
+            case 1:
+                if list_employees == []:
+                    id_employees = 101
                 else:
-                    break
-
-            while True:
-                salary_employee = input("Nhap muc luong: ")
-
-                try:
-                    salary_employee = float(salary_employee)
-
-                    if salary_employee > 0:
+                    id_employees = list_employees[len(list_employees) - 1]['id'] + 1
+                while True:
+                    name_input = input("Nhập tên nhân viên: ")
+                    if name_input.strip() == "":
+                        print("Tên người dùng không được để trống")
+                    else: 
                         break
-                    else:
-                        print("Luong phai lon hon 0!")
+                while True:
+                    salary_input = input("Hãy nhập lương: ")
+                    try:
+                        salary_input = float(salary_input)
+                        if salary_input > 0:
+                            break
+                        else:
+                            print("Lương phải lớn hơn 0")
+                    except ValueError:
+                        print("Lương phải là số thực")
+                new_employees = {
+                    "id": id_employees,
+                    "name": name_input,
+                    "salary": salary_input
+                }
+                list_employees.append(new_employees)
+                print(f"Thêm nhân viên thành công! ID: {id_employees}")
 
-                except:
-                    print("Vui long nhap dung dinh dang so!")
+            case 2:
+                if len(list_employees) == 0:
+                    print("Chưa có dữ liệu nhân sự")
+                else:
+                    print("ID    | TÊN NHÂN VIÊN     | MỨC LƯƠNG")
+                    for item in list_employees:
+                        print(f"{item['id']}  | {item['name']}   | {item['salary']}")
 
-            employee = {
-                "id": id_employee,
-                "name": name_employee,
-                "salary": salary_employee
-            }
+            case 3:
+                flag = None
+                search_id = int(input("Hãy nhập ID: "))
+                for item in list_employees:
+                    if item["id"] == search_id:
+                        flag = item
+                        print(f"thông tin nhân viên: {item}")
+                        break
+                if flag is None:
+                    print(f"Không tìm thấy nhân viên có ID: {search_id}")
 
-            list_employees.append(employee)
+            case 4:
+                flag = None
+                search_id = int(input("Hãy nhập ID: "))
+                for item in list_employees:
+                    if item["id"] == search_id:
+                        flag = item
+                        print(f"Đã xóa nhân viên ID: {item['id']} thành công!")
+                        list_employees.remove(item)
+                        break
+                if flag is None:
+                    print(f"Không tìm thấy nhân viên để xóa")
 
-            print(f"Them nhan vien thanh cong! ID: {id_employee}")
-
-        case 2:
-            if len(list_employees) == 0:
-                print("Chua co du lieu nhan su!")
-            else:
-                print("\n{:<10}{:<25}{:<15}".format("ID", "TEN", "LUONG"))
-
-                for employee in list_employees:
-                    print("{:<10}{:<25}{:<15}".format(
-                        employee["id"],
-                        employee["name"],
-                        employee["salary"]
-                    ))
-
-        case 3:
-            try:
-                search_id = int(input("Nhap ID can tim: "))
-            except:
-                print("ID khong hop le!")
-                continue
-
-            found = False
-
-            for employee in list_employees:
-                if employee["id"] == search_id:
-                    print(employee)
-                    found = True
-                    break
-
-            if not found:
-                print(f"Khong tim thay nhan vien co ID {search_id}!")
-
-        case 4:
-            try:
-                delete_id = int(input("Nhap ID can xoa: "))
-            except:
-                print("ID khong hop le!")
-                continue
-
-            found = False
-
-            for employee in list_employees:
-                if employee["id"] == delete_id:
-                    list_employees.remove(employee)
-                    print(f"Da xoa nhan vien ID {delete_id} thanh cong!")
-                    found = True
-                    break
-
-            if not found:
-                print("Khong tim thay nhan vien de xoa!")
-
-        case 5:
-            print("Da thoat chuong trinh!")
-            break
-
-        case _:
-            print("Lua chon khong hop le!")
-
-
+            case 5:
+                print("Chương trình kết thúc")
+                break
+            case _:
+                print("Dữ liệu không hợp lệ")
+    else:
+        print("Dữ liệu không hợp lệ")
